@@ -15,7 +15,20 @@ public class StringCalculator {
         if (numbers.isEmpty()) {
             return 0;
         }
-        return Integer.parseInt(numbers);
+
+        // handle single number
+        if (!numbers.contains(",")) {
+            return Integer.parseInt(numbers);
+        }
+
+        // handle two numbers separated by comma
+        String[] parts = numbers.split(",");
+        int sum = 0;
+        for (String part : parts) {
+            sum += Integer.parseInt(part);
+        }
+        return sum;
     }
 }
+
 
