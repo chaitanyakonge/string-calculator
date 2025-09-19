@@ -39,8 +39,20 @@ public class StringCalculatorTest {
 	    assertEquals(3, calc.add("//;\n1;2"), "Custom single-character delimiter ';' should work");
 	    assertEquals(6, calc.add("//|\n1|2|3"), "Custom single-character delimiter '|' should work");
 	}
+	
+	@Test
+	void testNegativeNumbersThrowException() {
+	    StringCalculator calc = new StringCalculator();
 
+	    Exception exception = assertThrows(
+		IllegalArgumentException.class,
+		() -> calc.add("-1,2,-3"),
+		"Adding negative numbers should throw an exception"
+	    );
 
+	    assertTrue(exception.getMessage().contains("-1"));
+	    assertTrue(exception.getMessage().contains("-3"));
+	}
 
 }
 
