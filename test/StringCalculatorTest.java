@@ -32,6 +32,14 @@ public class StringCalculatorTest {
 	    assertEquals(6, calc.add("1\n2,3"), "Numbers separated by newlines and commas should sum correctly");
 	    assertEquals(10, calc.add("1\n2\n3,4"), "Multiple numbers with newlines and commas should sum correctly");
 	}
+	
+	@Test
+	void testCustomDelimiter() {
+	    StringCalculator calc = new StringCalculator();
+	    assertEquals(3, calc.add("//;\n1;2"), "Custom single-character delimiter ';' should work");
+	    assertEquals(6, calc.add("//|\n1|2|3"), "Custom single-character delimiter '|' should work");
+	}
+
 
 
 }
