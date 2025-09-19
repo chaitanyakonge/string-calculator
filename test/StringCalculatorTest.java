@@ -68,5 +68,15 @@ public class StringCalculatorTest {
 	    calc.add("3,4,5");
 	    assertEquals(2, calc.GetCalledCount(), "GetCalledCount should be 2 after second call");
 	}
+	
+	@Test
+	void testNumbersGreaterThan1000AreIgnored() {
+	    StringCalculator calc = new StringCalculator();
+
+	    assertEquals(2, calc.add("2,1001"), "Numbers greater than 1000 should be ignored");
+	    assertEquals(1002, calc.add("2,1000"), "1000 should be included");
+	    assertEquals(0, calc.add("1001,2000"), "All numbers >1000 should be ignored");
+	}
+
 }
 
