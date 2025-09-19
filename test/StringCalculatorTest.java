@@ -85,6 +85,15 @@ public class StringCalculatorTest {
 	    assertEquals(6, calc.add("//[***]\n1***2***3"), "Delimiter of any length should work");
 	    assertEquals(10, calc.add("//[###]\n2###3###5"), "Another long delimiter should work");
 	}
+	
+	@Test
+	void testMultipleDelimiters() {
+	    StringCalculator calc = new StringCalculator();
+
+	    assertEquals(6, calc.add("//[*][%]\n1*2%3"), "Should handle multiple single-character delimiters");
+	    assertEquals(10, calc.add("//[***][%%]\n2***3%%5"), "Should handle multiple multi-character delimiters");
+	}
+
 
 
 }
