@@ -11,6 +11,12 @@
 */
 
 public class StringCalculator {
-    
+    public int add(String numbers) {
+        if (numbers.isEmpty()) {
+            return 0;
+        }
+        // for now, just return 0 until we handle other cases
+        return 0;
+    }
 }
 
