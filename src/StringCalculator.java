@@ -9,21 +9,26 @@
 		-Calling add with a negative number will throw an exception: "negative numbers not allowed <negative_number>".
 			If there are multiple negative numbers, show all of them in the exception message, separated by commas.
 */
-
+import java.util.regex.Pattern;
 public class StringCalculator {
-    public int add(String numbers) {
-    if (numbers.isEmpty()) return 0;
+	public int add(String numbers) {
+	    if (numbers.isEmpty()) return 0;
 
-    // Replace newlines with commas so we can split on a single separator
-    numbers = numbers.replace("\n", ",");
+	    String delimiter = ","; // default
+	    if (numbers.startsWith("//")) {
+		delimiter = String.valueOf(numbers.charAt(2));
+		numbers = numbers.substring(4);
+	    }
 
-    String[] parts = numbers.split(","); 
-    int sum = 0;
-    for (String part : parts) {
-        sum += Integer.parseInt(part);
-    }
-    return sum;
-}
+	    numbers = numbers.replace("\n", delimiter);
+
+	    String[] parts = numbers.split(Pattern.quote(delimiter)); // escape special chars
+	    int sum = 0;
+	    for (String part : parts) {
+		sum += Integer.parseInt(part);
+	    }
+	    return sum;
+	}
 
 }
 
