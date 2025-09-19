@@ -74,9 +74,18 @@ public class StringCalculatorTest {
 	    StringCalculator calc = new StringCalculator();
 
 	    assertEquals(2, calc.add("2,1001"), "Numbers greater than 1000 should be ignored");
-	    assertEquals(1002, calc.add("2,1000"), "1000 should be included");
+		    assertEquals(1002, calc.add("2,1000"), "1000 should be included");
 	    assertEquals(0, calc.add("1001,2000"), "All numbers >1000 should be ignored");
 	}
+	
+	@Test
+	void testDelimiterOfAnyLength() {
+	    StringCalculator calc = new StringCalculator();
+
+	    assertEquals(6, calc.add("//[***]\n1***2***3"), "Delimiter of any length should work");
+	    assertEquals(10, calc.add("//[###]\n2###3###5"), "Another long delimiter should work");
+	}
+
 
 }
 
