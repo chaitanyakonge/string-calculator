@@ -15,64 +15,75 @@ import java.util.List;
 
 public class StringCalculator {
 
+    // inner interface for event
+    public interface AddListener {
+        void onAdd(String input, int result);
+    }
+
     private int callCount = 0; // track number of add() calls
+    private AddListener listener; // event listener
+
+    public void setAddListener(AddListener listener) {
+        this.listener = listener;
+    }
 
     public int add(String numbers) {
-    callCount++;  // track call count
+        callCount++;  // track call count
 
-    if (numbers.isEmpty()) return 0;
+        if (numbers.isEmpty()) return 0;
 
-    String[] parts;
-    String delimitersRegex = ",|\n"; // default delimiters
+        String[] parts;
+        String delimitersRegex = ",|\n"; // default delimiters
 
-    if (numbers.startsWith("//")) {
-        int newlineIndex = numbers.indexOf("\n");
-        String delimiterSection = numbers.substring(2, newlineIndex);
+        if (numbers.startsWith("//")) {
+            int newlineIndex = numbers.indexOf("\n");
+            String delimiterSection = numbers.substring(2, newlineIndex);
 
-        // Check for multiple delimiters
-        List<String> delimitersList = new ArrayList<>();
+            // Check for multiple delimiters
+            List<String> delimitersList = new ArrayList<>();
 
-        if (delimiterSection.startsWith("[") && delimiterSection.endsWith("]")) {
-            // Multiple delimiters
-            int start = 0;
-            while ((start = delimiterSection.indexOf("[", start)) != -1) {
-                int end = delimiterSection.indexOf("]", start);
-                delimitersList.add(Pattern.quote(delimiterSection.substring(start + 1, end)));
-                start = end + 1;
+            if (delimiterSection.startsWith("[") && delimiterSection.endsWith("]")) {
+                // Multiple delimiters
+                int start = 0;
+                while ((start = delimiterSection.indexOf("[", start)) != -1) {
+                    int end = delimiterSection.indexOf("]", start);
+                    delimitersList.add(Pattern.quote(delimiterSection.substring(start + 1, end)));
+                    start = end + 1;
+                }
+            } else {
+                // Single-character delimiter
+                delimitersList.add(Pattern.quote(delimiterSection));
             }
-        } else {
-            // Single-character delimiter
-            delimitersList.add(Pattern.quote(delimiterSection));
+
+            delimitersRegex = String.join("|", delimitersList);
+            numbers = numbers.substring(newlineIndex + 1);
         }
 
-        // Join all delimiters with | to create regex
-        delimitersRegex = String.join("|", delimitersList);
-        numbers = numbers.substring(newlineIndex + 1);
+        parts = numbers.split(delimitersRegex);
+
+        int sum = 0;
+        List<Integer> negatives = new ArrayList<>();
+
+        for (String part : parts) {
+            if (part.isEmpty()) continue;
+            int num = Integer.parseInt(part);
+            if (num < 0) negatives.add(num);
+            if (num <= 1000) sum += num;
+        }
+
+        if (!negatives.isEmpty()) {
+            throw new IllegalArgumentException("Negatives not allowed: " + negatives);
+        }
+
+        if (listener != null) {
+            listener.onAdd(numbers, sum);
+        }
+
+        return sum;
     }
-
-    parts = numbers.split(delimitersRegex);
-
-    int sum = 0;
-    List<Integer> negatives = new ArrayList<>();
-
-    for (String part : parts) {
-        if (part.isEmpty()) continue;
-        int num = Integer.parseInt(part);
-        if (num < 0) negatives.add(num);
-        if (num <= 1000) sum += num;
-    }
-
-    if (!negatives.isEmpty()) {
-        throw new IllegalArgumentException("Negatives not allowed: " + negatives);
-    }
-
-    return sum;
-}
 
     public int GetCalledCount() {
         return callCount;
     }
 }
-
-
 
