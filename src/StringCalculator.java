@@ -10,6 +10,9 @@
 			If there are multiple negative numbers, show all of them in the exception message, separated by commas.
 */
 import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringCalculator {
 	public int add(String numbers) {
 	    if (numbers.isEmpty()) return 0;
@@ -22,14 +25,24 @@ public class StringCalculator {
 
 	    numbers = numbers.replace("\n", delimiter);
 
-	    String[] parts = numbers.split(Pattern.quote(delimiter)); // escape special chars
+	    String[] parts = numbers.split(Pattern.quote(delimiter));
 	    int sum = 0;
+	    List<Integer> negatives = new ArrayList<>();
+
 	    for (String part : parts) {
-		sum += Integer.parseInt(part);
+		int num = Integer.parseInt(part);
+		if (num < 0) {
+		    negatives.add(num);
+		}
+		sum += num;
 	    }
+
+	    if (!negatives.isEmpty()) {
+		throw new IllegalArgumentException("Negatives not allowed: " + negatives);
+	    }
+
 	    return sum;
 	}
-
 }
 
 
