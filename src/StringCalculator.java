@@ -35,12 +35,14 @@ public class StringCalculator {
         List<Integer> negatives = new ArrayList<>();
 
         for (String part : parts) {
-            int num = Integer.parseInt(part);
-            if (num < 0) {
-                negatives.add(num);
-            }
-            sum += num;
-        }
+	    int num = Integer.parseInt(part);
+	    if (num < 0) {
+		negatives.add(num);
+	    }
+	    if (num <= 1000) {   // Ignore numbers >1000
+		sum += num;
+	    }
+	}
 
         if (!negatives.isEmpty()) {
             throw new IllegalArgumentException("Negatives not allowed: " + negatives);
