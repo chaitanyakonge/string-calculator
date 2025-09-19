@@ -53,6 +53,20 @@ public class StringCalculatorTest {
 	    assertTrue(exception.getMessage().contains("-1"));
 	    assertTrue(exception.getMessage().contains("-3"));
 	}
+	
+	@Test
+	void testGetCalledCount() {
+	    StringCalculator calc = new StringCalculator();
 
+	    // Initially, add() hasn't been called
+	    assertEquals(0, calc.GetCalledCount(), "GetCalledCount should be 0 initially");
+
+	    // Call add() multiple times
+	    calc.add("1,2");
+	    assertEquals(1, calc.GetCalledCount(), "GetCalledCount should be 1 after first call");
+
+	    calc.add("3,4,5");
+	    assertEquals(2, calc.GetCalledCount(), "GetCalledCount should be 2 after second call");
+	}
 }
 
