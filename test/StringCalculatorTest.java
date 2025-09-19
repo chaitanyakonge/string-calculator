@@ -6,5 +6,11 @@ public class StringCalculatorTest {
         	StringCalculator calc = new StringCalculator();
         	assertEquals(0, calc.add(""), "Empty string should return 0");
     	}
+    	
+    	@Test
+    	void testSingleNumberReturnsValue() {
+        	StringCalculator calc = new StringCalculator();
+        	assertEquals(1, calc.add("1"), "Single number should return itself");
+    	}
 }
 
