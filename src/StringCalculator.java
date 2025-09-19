@@ -18,31 +18,41 @@ public class StringCalculator {
     private int callCount = 0; // track number of add() calls
 
     public int add(String numbers) {
-        callCount++; // increment counter
+        callCount++;  // increment call count each time add() is called
 
         if (numbers.isEmpty()) return 0;
 
-        String delimiter = ","; // default
+        String delimiter = ","; // default delimiter
+        String[] parts;
+
         if (numbers.startsWith("//")) {
-            delimiter = String.valueOf(numbers.charAt(2));
-            numbers = numbers.substring(4);
+            // Custom delimiter specified
+            if (numbers.charAt(2) == '[') {
+                // Multi-character delimiter
+                int end = numbers.indexOf(']');
+                delimiter = numbers.substring(3, end);
+                numbers = numbers.substring(end + 2); // remove "//[***]\n"
+            } else {
+                // Single-character delimiter
+                delimiter = String.valueOf(numbers.charAt(2));
+                numbers = numbers.substring(4); // remove "//;\n"
+            }
+            // Split ONLY by the custom delimiter (newlines and commas are ignored)
+            parts = numbers.split(Pattern.quote(delimiter));
+        } else {
+            // Default delimiters: comma and newline
+            parts = numbers.split(",|\n");
         }
 
-        numbers = numbers.replace("\n", delimiter);
-
-        String[] parts = numbers.split(Pattern.quote(delimiter));
         int sum = 0;
         List<Integer> negatives = new ArrayList<>();
 
         for (String part : parts) {
-	    int num = Integer.parseInt(part);
-	    if (num < 0) {
-		negatives.add(num);
-	    }
-	    if (num <= 1000) {   // Ignore numbers >1000
-		sum += num;
-	    }
-	}
+            if (part.isEmpty()) continue; // skip empty parts
+            int num = Integer.parseInt(part);
+            if (num < 0) negatives.add(num);
+            if (num <= 1000) sum += num; // ignore numbers >1000
+        }
 
         if (!negatives.isEmpty()) {
             throw new IllegalArgumentException("Negatives not allowed: " + negatives);
@@ -55,5 +65,6 @@ public class StringCalculator {
         return callCount;
     }
 }
+
 
 
