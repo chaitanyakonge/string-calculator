@@ -25,6 +25,14 @@ public class StringCalculatorTest {
 	    assertEquals(6, calc.add("1,2,3"), "Multiple numbers should return their sum");
 	    assertEquals(10, calc.add("1,2,3,4"), "Four numbers should return their sum");
 	}
+	
+	@Test
+	void testNumbersWithNewlines() {
+	    StringCalculator calc = new StringCalculator();
+	    assertEquals(6, calc.add("1\n2,3"), "Numbers separated by newlines and commas should sum correctly");
+	    assertEquals(10, calc.add("1\n2\n3,4"), "Multiple numbers with newlines and commas should sum correctly");
+	}
+
 
 }
 
