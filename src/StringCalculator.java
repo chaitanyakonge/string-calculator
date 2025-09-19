@@ -14,7 +14,10 @@ public class StringCalculator {
     public int add(String numbers) {
     if (numbers.isEmpty()) return 0;
 
-    String[] parts = numbers.split(","); // works for single or multiple numbers
+    // Replace newlines with commas so we can split on a single separator
+    numbers = numbers.replace("\n", ",");
+
+    String[] parts = numbers.split(","); 
     int sum = 0;
     for (String part : parts) {
         sum += Integer.parseInt(part);
