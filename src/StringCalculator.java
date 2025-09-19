@@ -18,48 +18,56 @@ public class StringCalculator {
     private int callCount = 0; // track number of add() calls
 
     public int add(String numbers) {
-        callCount++;  // increment call count each time add() is called
+    callCount++;  // track call count
 
-        if (numbers.isEmpty()) return 0;
+    if (numbers.isEmpty()) return 0;
 
-        String delimiter = ","; // default delimiter
-        String[] parts;
+    String[] parts;
+    String delimitersRegex = ",|\n"; // default delimiters
 
-        if (numbers.startsWith("//")) {
-            // Custom delimiter specified
-            if (numbers.charAt(2) == '[') {
-                // Multi-character delimiter
-                int end = numbers.indexOf(']');
-                delimiter = numbers.substring(3, end);
-                numbers = numbers.substring(end + 2); // remove "//[***]\n"
-            } else {
-                // Single-character delimiter
-                delimiter = String.valueOf(numbers.charAt(2));
-                numbers = numbers.substring(4); // remove "//;\n"
+    if (numbers.startsWith("//")) {
+        int newlineIndex = numbers.indexOf("\n");
+        String delimiterSection = numbers.substring(2, newlineIndex);
+
+        // Check for multiple delimiters
+        List<String> delimitersList = new ArrayList<>();
+
+        if (delimiterSection.startsWith("[") && delimiterSection.endsWith("]")) {
+            // Multiple delimiters
+            int start = 0;
+            while ((start = delimiterSection.indexOf("[", start)) != -1) {
+                int end = delimiterSection.indexOf("]", start);
+                delimitersList.add(Pattern.quote(delimiterSection.substring(start + 1, end)));
+                start = end + 1;
             }
-            // Split ONLY by the custom delimiter (newlines and commas are ignored)
-            parts = numbers.split(Pattern.quote(delimiter));
         } else {
-            // Default delimiters: comma and newline
-            parts = numbers.split(",|\n");
+            // Single-character delimiter
+            delimitersList.add(Pattern.quote(delimiterSection));
         }
 
-        int sum = 0;
-        List<Integer> negatives = new ArrayList<>();
-
-        for (String part : parts) {
-            if (part.isEmpty()) continue; // skip empty parts
-            int num = Integer.parseInt(part);
-            if (num < 0) negatives.add(num);
-            if (num <= 1000) sum += num; // ignore numbers >1000
-        }
-
-        if (!negatives.isEmpty()) {
-            throw new IllegalArgumentException("Negatives not allowed: " + negatives);
-        }
-
-        return sum;
+        // Join all delimiters with | to create regex
+        delimitersRegex = String.join("|", delimitersList);
+        numbers = numbers.substring(newlineIndex + 1);
     }
+
+    parts = numbers.split(delimitersRegex);
+
+    int sum = 0;
+    List<Integer> negatives = new ArrayList<>();
+
+    for (String part : parts) {
+        if (part.isEmpty()) continue;
+        int num = Integer.parseInt(part);
+        if (num < 0) negatives.add(num);
+        if (num <= 1000) sum += num;
+    }
+
+    if (!negatives.isEmpty()) {
+        throw new IllegalArgumentException("Negatives not allowed: " + negatives);
+    }
+
+    return sum;
+}
 
     public int GetCalledCount() {
         return callCount;
