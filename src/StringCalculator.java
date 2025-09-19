@@ -14,35 +14,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringCalculator {
-	public int add(String numbers) {
-	    if (numbers.isEmpty()) return 0;
 
-	    String delimiter = ","; // default
-	    if (numbers.startsWith("//")) {
-		delimiter = String.valueOf(numbers.charAt(2));
-		numbers = numbers.substring(4);
-	    }
+    private int callCount = 0; // track number of add() calls
 
-	    numbers = numbers.replace("\n", delimiter);
+    public int add(String numbers) {
+        callCount++; // increment counter
 
-	    String[] parts = numbers.split(Pattern.quote(delimiter));
-	    int sum = 0;
-	    List<Integer> negatives = new ArrayList<>();
+        if (numbers.isEmpty()) return 0;
 
-	    for (String part : parts) {
-		int num = Integer.parseInt(part);
-		if (num < 0) {
-		    negatives.add(num);
-		}
-		sum += num;
-	    }
+        String delimiter = ","; // default
+        if (numbers.startsWith("//")) {
+            delimiter = String.valueOf(numbers.charAt(2));
+            numbers = numbers.substring(4);
+        }
 
-	    if (!negatives.isEmpty()) {
-		throw new IllegalArgumentException("Negatives not allowed: " + negatives);
-	    }
+        numbers = numbers.replace("\n", delimiter);
 
-	    return sum;
-	}
+        String[] parts = numbers.split(Pattern.quote(delimiter));
+        int sum = 0;
+        List<Integer> negatives = new ArrayList<>();
+
+        for (String part : parts) {
+            int num = Integer.parseInt(part);
+            if (num < 0) {
+                negatives.add(num);
+            }
+            sum += num;
+        }
+
+        if (!negatives.isEmpty()) {
+            throw new IllegalArgumentException("Negatives not allowed: " + negatives);
+        }
+
+        return sum;
+    }
+
+    public int GetCalledCount() {
+        return callCount;
+    }
 }
 
 
