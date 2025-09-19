@@ -18,5 +18,13 @@ public class StringCalculatorTest {
 	    StringCalculator calc = new StringCalculator();
 	    assertEquals(3, calc.add("1,2"), "Two numbers should return their sum");
 	}
+	
+	@Test
+	void testMultipleNumbersReturnSum() {
+	    StringCalculator calc = new StringCalculator();
+	    assertEquals(6, calc.add("1,2,3"), "Multiple numbers should return their sum");
+	    assertEquals(10, calc.add("1,2,3,4"), "Four numbers should return their sum");
+	}
+
 }
 
