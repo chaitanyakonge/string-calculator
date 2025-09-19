@@ -12,5 +12,11 @@ public class StringCalculatorTest {
         	StringCalculator calc = new StringCalculator();
         	assertEquals(1, calc.add("1"), "Single number should return itself");
     	}
+    	
+	@Test
+	void testTwoNumbersReturnSum() {
+	    StringCalculator calc = new StringCalculator();
+	    assertEquals(3, calc.add("1,2"), "Two numbers should return their sum");
+	}
 }
 
