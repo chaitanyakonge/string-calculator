@@ -94,6 +94,24 @@ public class StringCalculatorTest {
 	    assertEquals(10, calc.add("//[***][%%]\n2***3%%5"), "Should handle multiple multi-character delimiters");
 	}
 
+	@Test
+	void testAddOccuredEventIsTriggered() {
+	    StringCalculator calc = new StringCalculator();
+
+	    final String[] givenInput = {null};
+	    final int[] givenResult = {0};
+
+	    calc.setAddListener((input, result) -> {
+		givenInput[0] = input;
+		givenResult[0] = result;
+	    });
+
+	    int result = calc.add("1,2");
+
+	    assertEquals(3, result, "Sum should be 3");
+	    assertEquals("1,2", givenInput[0], "Event should capture the input string");
+	    assertEquals(3, givenResult[0], "Event should capture the correct result");
+	}
 
 
 }
